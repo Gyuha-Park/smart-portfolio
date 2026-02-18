@@ -1,10 +1,15 @@
+import { HeroSection } from "@/components/sections/hero"
+import { SkillsSection } from "@/components/sections/skills"
+import { ProjectsSection } from "@/components/sections/projects"
+import { CareerSection } from "@/components/sections/career"
+
 export default function Page() {
   return (
-    <div className="flex h-screen w-full items-center justify-center">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">Coming Soon</h1>
-        <p className="text-muted-foreground">Smart Portfolio is currently under construction.</p>
-      </div>
+    <div className="flex flex-col min-h-screen">
+      <HeroSection />
+      <SkillsSection />
+      <ProjectsSection />
+      <CareerSection />
     </div>
   )
 }
