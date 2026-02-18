@@ -1,6 +1,5 @@
 import { getProject } from "@/app/admin/projects/actions"
 import { notFound } from "next/navigation"
-import Image from "next/image"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -13,28 +12,7 @@ interface PageProps {
 export default async function ProjectDetailPage({ params }: PageProps) {
     const { id } = await params
 
-    // Handling dummy ID from placeholder data in main page
-    let project = null
-    if (id === '1' || id === '2' || id === '3') {
-        // Dummy Data fallback
-        project = {
-            id,
-            title: id === '1' ? "AI Emotion Diary" : id === '2' ? "Smart Portfolio" : "E-commerce Dashboard",
-            short_description: "A dummy project description for demonstration.",
-            full_description: "This is a detailed description of the project.\n\nIt includes features, challenges, and solutions implemented during development.",
-            tech_stack: id === '1' ? ["Next.js", "OpenAI"] : ["React", "Tailwind"],
-            start_date: "2023-01-01",
-            end_date: null,
-            project_url: "https://example.com",
-            github_url: "https://github.com",
-            thumbnail_url: null,
-            slug: `project-${id}`,
-            is_featured: true,
-            created_at: new Date().toISOString()
-        }
-    } else {
-        project = await getProject(id)
-    }
+    const project = await getProject(id)
 
     if (!project) {
         notFound()
@@ -89,7 +67,6 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 </div>
 
                 <div className="relative aspect-video w-full overflow-hidden rounded-xl border bg-muted shadow-lg">
-                    {/* Placeholder for now */}
                     {project.thumbnail_url ? (
                         <img src={project.thumbnail_url} alt={project.title} className="object-cover w-full h-full" />
                     ) : (

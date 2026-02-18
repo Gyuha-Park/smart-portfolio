@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic"
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, FileText, Settings, LogOut, Users, MessageSquare } from "lucide-react"
+import { LayoutDashboard, FileText, Settings, LogOut, Users, MessageSquare, UserCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
@@ -15,6 +15,11 @@ const sidebarItems = [
         title: "Dashboard",
         href: "/admin/dashboard",
         icon: LayoutDashboard,
+    },
+    {
+        title: "Profile & Career",
+        href: "/admin/profile",
+        icon: UserCircle,
     },
     {
         title: "Projects",

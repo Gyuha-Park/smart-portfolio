@@ -35,6 +35,36 @@ create table if not exists skills (
   created_at timestamptz default now()
 );
 
+-- Profile Table (Singleton - one row)
+create table if not exists profile (
+  id uuid default gen_random_uuid() primary key,
+  name text not null default '',
+  title text default '',
+  bio text default '',
+  avatar_url text,
+  resume_url text,
+  email text,
+  github_url text,
+  linkedin_url text,
+  website_url text,
+  location text,
+  updated_at timestamptz default now()
+);
+
+-- Careers Table (Work Experience)
+create table if not exists careers (
+  id uuid default gen_random_uuid() primary key,
+  company text not null,
+  role text not null,
+  description text,
+  start_date text not null,
+  end_date text,
+  is_current boolean default false,
+  display_order integer default 0,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
 -- Documents Table (For RAG Source Material)
 create table if not exists documents (
   id uuid default gen_random_uuid() primary key,
@@ -101,6 +131,20 @@ create policy "Public skills are viewable by everyone" on skills for select usin
 create policy "Authenticated users can insert skills" on skills for insert with check (auth.role() = 'authenticated');
 create policy "Authenticated users can update skills" on skills for update using (auth.role() = 'authenticated');
 create policy "Authenticated users can delete skills" on skills for delete using (auth.role() = 'authenticated');
+
+-- Profile: Public Read, Authenticated Write
+alter table profile enable row level security;
+create policy "Public profile is viewable by everyone" on profile for select using (true);
+create policy "Authenticated users can insert profile" on profile for insert with check (auth.role() = 'authenticated');
+create policy "Authenticated users can update profile" on profile for update using (auth.role() = 'authenticated');
+create policy "Authenticated users can delete profile" on profile for delete using (auth.role() = 'authenticated');
+
+-- Careers: Public Read, Authenticated Write
+alter table careers enable row level security;
+create policy "Public careers are viewable by everyone" on careers for select using (true);
+create policy "Authenticated users can insert careers" on careers for insert with check (auth.role() = 'authenticated');
+create policy "Authenticated users can update careers" on careers for update using (auth.role() = 'authenticated');
+create policy "Authenticated users can delete careers" on careers for delete using (auth.role() = 'authenticated');
 
 -- Documents & Embeddings: Authenticated (Admin) Read/Write
 alter table documents enable row level security;

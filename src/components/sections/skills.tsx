@@ -2,27 +2,37 @@
 
 import { motion } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
+import type { Skill } from "@/app/admin/skills/actions"
 
-const skills = [
-    {
-        category: "Frontend",
-        items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Zustand"],
-    },
-    {
-        category: "Backend",
-        items: ["Node.js", "Supabase", "PostgreSQL", "Prisma", "Serverless Functions"],
-    },
-    {
-        category: "AI & Data",
-        items: ["Gemini API", "RAG Pipeline", "Vector Database", "LangChain"],
-    },
-    {
-        category: "DevOps & Tools",
-        items: ["Git", "Vercel", "Docker", "Figma"],
-    },
+// Fallback skills when DB is empty
+const fallbackSkills = [
+    { category: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS"] },
+    { category: "Backend", items: ["Node.js", "Supabase", "PostgreSQL"] },
+    { category: "AI & Data", items: ["Gemini API", "RAG Pipeline", "Vector DB"] },
+    { category: "DevOps & Tools", items: ["Git", "Vercel", "Docker"] },
 ]
 
-export function SkillsSection() {
+interface SkillsSectionProps {
+    skills: Skill[]
+}
+
+export function SkillsSection({ skills }: SkillsSectionProps) {
+    // Group skills by category from DB
+    const hasDbSkills = skills.length > 0
+
+    const grouped = hasDbSkills
+        ? skills.reduce<Record<string, string[]>>((acc, skill) => {
+            const cat = skill.category || "Other"
+            if (!acc[cat]) acc[cat] = []
+            acc[cat].push(skill.name)
+            return acc
+        }, {})
+        : null
+
+    const displayGroups = grouped
+        ? Object.entries(grouped).map(([category, items]) => ({ category, items }))
+        : fallbackSkills
+
     return (
         <section className="container mx-auto px-4 md:px-6 py-12 md:py-16">
             <div className="flex flex-col gap-8">
@@ -40,7 +50,7 @@ export function SkillsSection() {
                 </motion.div>
 
                 <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-                    {skills.map((group, index) => (
+                    {displayGroups.map((group, index) => (
                         <motion.div
                             key={group.category}
                             className="flex flex-col gap-4 rounded-xl border bg-card p-6 shadow-sm"

@@ -2,24 +2,26 @@
 
 import { motion } from "framer-motion"
 import { Briefcase, Calendar } from "lucide-react"
+import type { Career } from "@/app/admin/profile/actions"
 
-const experiences = [
+// Fallback experiences when DB is empty
+const fallbackExperiences = [
     {
-        id: 1,
+        id: "1",
         role: "Senior Frontend Developer",
         company: "Tech Startups Inc.",
         period: "2023.01 - Present",
         description: "Leading the frontend team, migrating legacy code to Next.js, and implementing a design system.",
     },
     {
-        id: 2,
+        id: "2",
         role: "Full Stack Developer",
         company: "Creative Agency",
         period: "2021.03 - 2022.12",
         description: "Developed various client websites using React and Node.js. Optimized performance and SEO.",
     },
     {
-        id: 3,
+        id: "3",
         role: "Junior Web Developer",
         company: "Web Solutions Co.",
         period: "2019.06 - 2021.02",
@@ -27,7 +29,25 @@ const experiences = [
     },
 ]
 
-export function CareerSection() {
+interface CareerSectionProps {
+    careers: Career[]
+}
+
+export function CareerSection({ careers }: CareerSectionProps) {
+    const hasDbCareers = careers.length > 0
+
+    const experiences = hasDbCareers
+        ? careers.map(c => ({
+            id: c.id,
+            role: c.role,
+            company: c.company,
+            period: c.is_current
+                ? `${c.start_date} - Present`
+                : `${c.start_date} - ${c.end_date || ""}`,
+            description: c.description || "",
+        }))
+        : fallbackExperiences
+
     return (
         <section className="container mx-auto px-4 md:px-6 py-12 md:py-16">
             <motion.div

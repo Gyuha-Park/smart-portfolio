@@ -18,8 +18,47 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Smart Portfolio",
-  description: "AI-powered Smart Portfolio with RAG Chatbot",
+  title: {
+    default: "Gyuha Park | Smart Portfolio",
+    template: "%s | Gyuha Park Portfolio",
+  },
+  description: "Full Stack Developer Gyuha Park의 포트폴리오. AI 기반 RAG 챗봇으로 프로젝트와 경력을 탐색하세요.",
+  keywords: ["포트폴리오", "풀스택 개발자", "Next.js", "React", "Supabase", "AI", "RAG", "Gyuha Park"],
+  authors: [{ name: "Gyuha Park" }],
+  creator: "Gyuha Park",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://smart-portfolio.vercel.app"),
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    siteName: "Gyuha Park Portfolio",
+    title: "Gyuha Park | Smart Portfolio",
+    description: "Full Stack Developer Gyuha Park의 포트폴리오. AI 기반 RAG 챗봇으로 프로젝트와 경력을 탐색하세요.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Gyuha Park Smart Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gyuha Park | Smart Portfolio",
+    description: "Full Stack Developer의 AI 기반 포트폴리오",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
