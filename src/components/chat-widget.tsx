@@ -9,9 +9,11 @@ import { MessageSquare, X, Send, Loader2 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 
 export function ChatWidget() {
-    const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat()
+    const { messages, sendMessage, status } = useChat()
     const [isOpen, setIsOpen] = useState(false)
+    const [input, setInput] = useState("")
     const scrollRef = useRef<HTMLDivElement>(null)
+    const isLoading = status === "streaming" || status === "submitted"
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -58,7 +60,7 @@ export function ChatWidget() {
                                                     : "bg-muted text-foreground"
                                                     }`}
                                             >
-                                                {m.content}
+                                                {m.parts.filter(p => p.type === "text").map(p => p.text).join("")}
                                             </div>
                                         </div>
                                     ))}
@@ -72,10 +74,15 @@ export function ChatWidget() {
                                 </div>
                             </CardContent>
                             <CardFooter className="p-3 border-t">
-                                <form onSubmit={handleSubmit} className="flex w-full items-center space-x-2">
+                                <form onSubmit={(e) => {
+                                    e.preventDefault()
+                                    if (!input.trim()) return
+                                    sendMessage({ text: input })
+                                    setInput("")
+                                }} className="flex w-full items-center space-x-2">
                                     <Input
                                         value={input}
-                                        onChange={handleInputChange}
+                                        onChange={(e) => setInput(e.target.value)}
                                         placeholder="Type a message..."
                                         className="flex-1 h-9 text-sm"
                                     />
